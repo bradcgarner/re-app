@@ -1,0 +1,7 @@
+
+
+Normal flow
+
+1. Agent talks with VP (phone or in-person).
+2. Agent creates a VP application.
+
