@@ -49,10 +49,6 @@ function App() {
 	const vpAppStatusHash = application.vpAppStatusHash || {};
 	const vpAppStatusInHash = vpAppStatusHash[`${vp_app_status}`] || {};
 	const isEditable = vpAppStatusInHash.editable;
-	console.log({vp_app_status,
-vpAppStatusHash,
-vpAppStatusInHash,
-isEditable})
 
 	const handleVpChange = (k, v) => {
 		if(isEditable){
