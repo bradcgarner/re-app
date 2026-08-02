@@ -181,41 +181,46 @@ select {
 	margin-bottom: 20px;
 	border-bottom: 5px solid #0083C0;
 }
-.display-group {
+.g1 {
 	flex-direction: column;
-	width: 100%;
+	width: 430px;
+	padding-left: 10px;
+	padding-right: 10px;
 	margin-bottom: 1vh;
 	justify-content: center;
 	align-items: center;
 }
-.edit-label {
+.g2 {
+	flex-direction: column;
+	padding: 10px;
+	width: 410px;
+	margin-bottom: 1vh;
+}
+.label1 {
 	display: flex;
 	flex-direction: column;
 	margin-bottom: 7px;
-	width: 400px;
+	width: 100%;
 	font-size: 16px;
 	color: #0083C0;
 }
 
-.edit-input {
+.input2 {
 	font-size: 16px;
 	padding: 3px;
-	margin: 3px;
-	border: 0.5px solid #0083C0;
-	color: #004b6e;
-}
-.edit-input-date {
-	width: 100px;
-}
-
-.edit-textarea {
-	min-height: 100px;
+	margin-top: 3px;
+	margin-bottom: 3px;
 	border: 0.5px solid #0083C0;
 	color: #004b6e;
 	font-family: 'Arial';
+	width: 100%;
 }
 
-.major-button {
+.input-taller {
+	min-height: 100px;
+}
+
+.button2 {
 	width: 100%;
 	max-width: 430px;
 	height: 50px;
@@ -226,10 +231,10 @@ select {
 	margin-bottom: 10px;
 	cursor: pointer;
 }
-.major-button:hover {
+.button2:hover {
 	opacity: 0.75;
 }
-.major-button-text {
+.button2-text {
 	text-align: center;
 	font-weight: bold;
 	color: white;

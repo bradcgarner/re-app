@@ -11,11 +11,13 @@ function App() {
 
 	// @@@@@@@@@@@ STATE @@@@@@@@@@@
 
-	const [application, setApplication] = useState({});
+	const [vpApp, setVPApp] = useState({vp_app_status: 0});
 	const [hasLoaded, setHasLoaded] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const [submitAttempted, setSubmitAttempted] = useState(false);
-	const [validationKeys, setValidationKeys] = useState({});
+	const [submitVPAppAttempted, setSubmitVPAppAttempted] = useState(false);
+	const [vpAppValidationKeys, setVPAppValidationKeys] = useState({});
+
+	const [vpAppStatusHash, setVPAppStatusHash] = useState({});
 
 	const queryString = getQueryString();
 
@@ -32,8 +34,13 @@ function App() {
 				return res.json();
 			})
 			.then(r=>{
+				console.log(r)
 				const newA = r || {};
-				setApplication(newA);
+				if(!newA.vp_app_status){
+					newA.vp_app_status = 0;
+				}
+				setVPApp(newA);
+				setVPAppStatusHash(newA.vpAppStatusHash); // in the main app, this pre-loads
 				setIsLoading(false);
 			})
 			.catch(err=>{
@@ -45,20 +52,21 @@ function App() {
 
 	// @@@@@@@@@@@ LOGIC @@@@@@@@@@@
 
-	const vp_app_status = application.vp_app_status || 1;
-	const vpAppStatusHash = application.vpAppStatusHash || {};
-	const vpAppStatusInHash = vpAppStatusHash[`${vp_app_status}`] || {};
-	const isEditable = vpAppStatusInHash.editable;
 
-	const handleVpChange = (k, v) => {
+	const handleVPAppChange = (k, v) => {
+
+		const vp_app_status = vpApp.vp_app_status || 1;
+		const vpAppStatusInHash = vpAppStatusHash[`${vp_app_status}`] || {};
+		const isEditable = vpAppStatusInHash.editable;
+
 		if(isEditable){
-			const newA = JSON.parse(JSON.stringify(application));
+			const newA = JSON.parse(JSON.stringify(vpApp));
 			newA[k] = v;
-			setApplication(newA);
+			setVPApp(newA);
 		}
 	};
 
-	const validateForm = () => {
+	const validateVPApp = () => {
 		const keys = {
 			vp_name_business: true,
 			vp_type: true,
@@ -74,12 +82,12 @@ function App() {
 		let isComplete = true;
 		for(let k in keys){
 			if(keys[k]===true){
-				if(!application[k]){
+				if(!vpApp[k]){
 					keys[k]=false;
 					isComplete = false;
 				}
 			} else {
-				if(application[k] !== keys[k]){
+				if(vpApp[k] !== keys[k]){
 					keys[k] = false;
 					isComplete = false;
 				}
@@ -91,13 +99,13 @@ function App() {
 		};
 	};
 
-	const saveApplication = () => {
+	const saveVPApp = () => {
 		const {
 			isComplete,
 			keys,
-		} = validateForm();
-		setValidationKeys(keys);
-		setSubmitAttempted(true);
+		} = validateVPApp();
+		setVPAppValidationKeys(keys);
+		setSubmitVPAppAttempted(true);
 		if(!isComplete){
 			return;
 		}
@@ -108,14 +116,14 @@ function App() {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(application),
+			body: JSON.stringify(vpApp),
 		};
 		fetch(`${REACT_APP_API_URL}api/open/`, init)
 			.then(res=>{
 				return res.json();
 			})
 			.then(r=>{
-				setApplication(r);
+				setVPApp(r);
 
 				if(typeof window !== 'undefined' && window.location){
 					const searchParams = new URLSearchParams(window.location.search);
@@ -134,12 +142,14 @@ function App() {
 
   return <div className="App">
 			<Application
-				application={application}
-				handleVpChange={handleVpChange}
+				vpApp={vpApp}
+				handleVPAppChange={handleVPAppChange}
 				setIsLoading={setIsLoading}
-				saveApplication={saveApplication}
-				validationKeys={validationKeys}
-				submitAttempted={submitAttempted}
+				saveVPApp={saveVPApp}
+				vpAppValidationKeys={vpAppValidationKeys}
+				submitVPAppAttempted={submitVPAppAttempted}
+				vpAppStatusHash={vpAppStatusHash}
+				internalWidget={null}
 			/>
 			{
 				isLoading ? <Loading/> : null
